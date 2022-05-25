@@ -19,25 +19,25 @@ BalanceSHAP
 
 # BalanceSHAP Introduction 
 ## Description
-BalanceSHAP is a light-weight package integrated with balancing procedures for background and explanation data based on original SHAP. In the face of data imbalance, which is prevalent in medical datasets, we are concerned that such data imbalance will add noise to model explanations. We anticipate that by balancing the background and explanation data, we may improve SHAP explanations and discriminate the meaningful signals from the noises.  
+BalanceSHAP is a light-weight package, integrated with balancing procedures for background and explanation data based on original SHAP. In the face of data imbalance, which is prevalent in medical datasets, we are concerned that such data imbalance will add noise to model explanations. We anticipate that by balancing the background and explanation data, we may improve SHAP explanations and discriminate the meaningful signals from the noises.  
 
 Our findings suggest that: 
 - The balancing strategy for background data can help reduce the "abnormal points" on explanation results in terms of beeswarm plot. "Abnormal points" refers to those points contrary to the general association bettwen feature contribution and value. 
 <div class="figure" style="text-align: center">
 
 <img src="fig/0.08_0.5_shap_scatter.jpg" width="100%"/>
-<figcaption align = "center"><b>unbalanced background & explanation data (left)  
+<figcaption align = "center"><b>unbalanced background & explanation data (a)  
 
-balanced background & unbalanced explanation data (right)</b></figcaption>
+balanced background & unbalanced explanation data (b)</b></figcaption>
 </div>
 
 - The balancing strategy for explanation data will not result in loss of informantion in terms of model explanations; instead, it can contribute to the improvement of time efficiency in SHAP applications. 
 <div class="figure" style="text-align: center">
 
 <img src="fig/0.08_0.5_0.5dsample_shap_scatter.jpg" width="100%"/>
-<figcaption align = "center"><b>balanced background data & unbalanced explanation data (left)  
+<figcaption align = "center"><b>balanced background data & unbalanced explanation data (a)  
 
-balanced background & unbalanced explanation data (right)</b></figcaption>
+balanced background & unbalanced explanation data (b)</b></figcaption>
 </div>
 The application of BalanceSHAP consists 3 steps:  
 
