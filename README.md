@@ -95,11 +95,13 @@ kmax = 7
 majority_class = val_data.loc[val_data["label"] == 0, ].drop(columns="label")
 sse = process.calculate_WSS(majority_class, kmax)
 ```
-<div class="figure" style="text-align: center">
+
+<div align=center>
 
 <img src="fig/elbow_plot.jpg" width="50%" height="50%"/>
 
 </div>
+
 According to the elbow plot, the number of clusters is determined as 3. May try larger numbers if more time resource available.  
 
 - data: data frame with (binary) label named as "label"
@@ -137,9 +139,9 @@ shap.initjs()
 fig = plt.figure()
 shap.summary_plot(balanced_shaps, features=x_explanation, feature_names=feature_names, plot_size='auto')
 ```
-<div class="figure" style="text-align: center" >
+<div align=center>
 
-<img src="fig/balanced_beeswarm.jpg" width="60%" height="60%"/>
+<img src="fig/balanced_beeswarm.jpg" width="70%" height="70%"/>
 
 </div>
 
