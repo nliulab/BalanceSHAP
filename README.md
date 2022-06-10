@@ -22,22 +22,25 @@ BalanceSHAP
 BalanceSHAP is a light-weight package, integrated with balancing procedures for background and explanation data based on original SHAP. In the face of data imbalance, which is prevalent in medical datasets, we are concerned that such data imbalance will add noise to model explanations. We anticipate that by balancing the background and explanation data, we may improve SHAP explanations and discriminate the meaningful signals from the noises.  
 
 Our findings suggest that: 
+- Data imbalance can result in inaccurate SHAP explanations, which appears as abnormal points on the beeswarm plot that deviate significantly from the general trend of association between variable values and corresponding SHAP values.
 - The balancing strategy for background data can help reduce the "abnormal points" on explanation results in terms of beeswarm plot. "Abnormal points" refers to those points contrary to the general association bettwen feature contribution and value. 
 <div class="figure" style="text-align: center">
 
 <img src="fig/0.08_0.5_shap_scatter.jpg" width="100%"/>
-<figcaption align = "center"><b>unbalanced background & explanation data (a)  
+<figcaption align = "left"><b>
 
-balanced background & unbalanced explanation data (b)</b></figcaption>
+(a) **unbalanced background** & unbalanced explanation data  
+(b) **balanced background** & unbalanced explanation data</b></figcaption>
 </div>
 
 - The balancing strategy for explanation data will not result in loss of informantion in terms of model explanations; instead, it can contribute to the improvement of time efficiency in SHAP applications. 
 <div class="figure" style="text-align: center">
 
 <img src="fig/0.08_0.5_0.5dsample_shap_scatter.jpg" width="100%"/>
-<figcaption align = "center"><b>balanced background data & unbalanced explanation data (a)  
+<figcaption align = "left"><b>
 
-balanced background & unbalanced explanation data (b)</b></figcaption>
+(a) balanced background data & **unbalanced explanation data**  
+(b) balanced background data & **balanced explanation data**</b></figcaption>
 </div>
 The application of BalanceSHAP consists 3 steps:  
 
@@ -46,9 +49,10 @@ The application of BalanceSHAP consists 3 steps:
 3. Computing SHAP values and plotting
 
 ## Citation
+Liu M, Ning Y, Yuan H, Eng Hock Ong M, Liu N. Balanced background and explanation data are needed in explaining deep learning models with SHAP: An empirical study on clinical decision making. arXiv e-prints. 2022:arXiv:2206.04050-arXiv:2206.04050. (https://arxiv.org/abs/2206.04050)
 ## Contact
-- Nan Liu (Email: <liu.nan@duke-nus.edu.sg>)
 - Mingxuan Liu (Email: <m.liu@duke-nus.edu.sg>)
+- Nan Liu (Email: <liu.nan@duke-nus.edu.sg>)
 
 # BalanceSHAP Demo
 ## Install the library
@@ -66,7 +70,7 @@ event_rate = round(np.mean(data["label"] == 1), 3)
 mor = event_rate 
 ```
 ## Train the targeted model
-After conducting regular data preparation procedures like predictors-extraction, standord normalization, tensor-conversion, batch-loader, etc., a targeted model `model` can be built. (More details refer to Demo.ipynb notebook.)
+After conducting regular data preparation procedures like splitting of predictors (X) and outcome (y), standord normalization, tensor-conversion, batch-loader, etc., a targeted model `model` can be built. (More details refer to [Demo.ipynb notebook](https://github.com/nliulab/BalanceSHAP/blob/main/Demo.ipynb).)
 
 ## BalanceSHAP: Generate background and explanation data
 ### Background data
@@ -93,7 +97,7 @@ sse = process.calculate_WSS(majority_class, kmax)
 ```
 <div class="figure" style="text-align: center">
 
-<img src="fig/elbow_plot.png" width="70%"/>
+<img src="fig/elbow_plot.jpg" width="50%" height="50%"/>
 
 </div>
 According to the elbow plot, the number of clusters is determined as 3. May try larger numbers if more time resource available.  
@@ -118,15 +122,10 @@ For better supervising the computation process, we provide a progress bar based 
 - model: targeted model
 - x_background: tensor, predictors in background data
 - x_explanantion: tensor, predictors in explanation data
+- explainer: str, options: "DeepSHAP" (default, recommended), "GradientSHAP"
 ```python
 balanced_shaps = SHAP.shap_values(model, x_background_tensor, x_explanation_tensor)
 unbalanced_shaps = SHAP.shap_values(model, x_unbalanced_background_tensor, x_unbalanced_explanation_tensor)
-```
-For other explainers, 
-```python
-e = shap.GradientExplainer(model, x_background_tensor)
-balanced_shaps = e.shap_values(x_explanation_tensor, nsamples=x_explanation_tensor.shape[0])[1]
-unbalanced_shaps = e.shap_values(x_unbalanced_explanation_tensor, nsamples=x_unbalanced_explanation_tensor.shape[0])[1]
 ```
 
 ## SHAP: Plotting 
@@ -138,22 +137,10 @@ shap.initjs()
 fig = plt.figure()
 shap.summary_plot(balanced_shaps, features=x_explanation, feature_names=feature_names, plot_size='auto')
 ```
-<div class="figure" style="text-align: center">
+<div class="figure" style="text-align: center" >
 
-<img src="fig/balanced_beeswarm.png" width="90%"/>
-
-</div>
-```python
-shap.initjs()
-fig = plt.figure()
-shap.summary_plot(unbalanced_shaps, features=x_unbalanced_explanation, feature_names=feature_names, plot_size='auto')
-```
-<div class="figure" style="text-align: center">
-
-<img src="fig/unbalanced_beeswarm.png" width="90%"/>
+<img src="fig/balanced_beeswarm.jpg" width="60%" height="60%"/>
 
 </div>
-
-Compared to the figure above, there are "abnormal points" for variables `systolic blood pressure`, `creatinine`, `potassium`, `glucose`, `diastolic blood pressure`. `mean blood pressure`, and `spo2`.
 
 
